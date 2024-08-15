@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>한국어 - 영어 번역</title>
+		<link rel="stylesheet" href="/static/css/style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>한국어 - 영어 번역</h1>
+			<form id="translationForm">
+				<label for="message">번역할 텍스트를 입력하세요:</label>
+				<textarea
+					id="message"
+					name="message"
+					rows="10"
+					placeholder="여기에 한국어 텍스트를 입력하세요..."
+				></textarea>
+				<button type="submit">번역하기</button>
+			</form>
+
+			<div id="result" class="hidden">
+				<div class="result-section">
+					<h2>번역 결과:</h2>
+					<p id="translationResult"></p>
+				</div>
+				<div class="result-section">
+					<h2>발음 표기:</h2>
+					<ul id="pronunciationResult"></ul>
+				</div>
+			</div>
+		</div>
+
+		<script src="/static/js/script.js"></script>
+	</body>
+</html>

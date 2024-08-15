@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>번역 결과</title>
+		<link rel="stylesheet" href="/static/css/style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>번역 결과</h1>
+			<div id="result">
+				<div class="result-section">
+					<h2>번역 결과:</h2>
+					<p id="translation">{{ data.translation }}</p>
+				</div>
+				<div class="result-section">
+					<h2>발음 표기:</h2>
+					<ul id="pronunciation">
+						{% for pron in data.pronunciation %}
+						<li>{{ pron }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

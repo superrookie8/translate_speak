@@ -1,0 +1,143 @@
+body {
+	font-family: "Arial", sans-serif;
+	background-color: #f0f4f8;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.container {
+	background-color: white;
+	padding: 2rem;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	width: 90%;
+	max-width: 800px;
+}
+
+h1 {
+	color: #2c3e50;
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	margin-bottom: 0.5rem;
+	color: #34495e;
+	font-weight: bold;
+}
+
+textarea {
+	width: 100%;
+	height: 200px;
+	padding: 0.5rem;
+	margin-bottom: 1rem;
+	border: 1px solid #bdc3c7;
+	border-radius: 5px;
+	resize: vertical;
+	font-size: 1rem;
+}
+
+button {
+	background-color: #3498db;
+	color: white;
+	border: none;
+	padding: 0.75rem;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.3s ease;
+}
+
+button:hover {
+	background-color: #2980b9;
+}
+
+.result-section {
+	margin-top: 2rem;
+	background-color: #ecf0f1;
+	padding: 1rem;
+	border-radius: 5px;
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.result-section p {
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	margin: 0;
+}
+
+h2 {
+	color: #2c3e50;
+	margin-top: 0;
+}
+
+.hidden {
+	display: none;
+}
+
+#result {
+	display: none;
+	width: 90%;
+	max-width: 600px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 20px;
+	margin-top: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#result h2 {
+	font-size: 18px;
+	margin-bottom: 10px;
+	color: #333;
+}
+
+#result p {
+	font-size: 16px;
+	line-height: 1.5;
+	color: #555;
+	background-color: #f9f9f9;
+	padding: 10px;
+	border-radius: 4px;
+	word-break: break-word; /* 긴 단어가 화면을 넘치지 않도록 함 */
+}
+
+ul#pronunciationResult {
+	list-style-type: none; /* 불릿 포인트(기호) 제거 */
+	padding-left: 0; /* 왼쪽 여백 제거 */
+}
+
+ul#pronunciationResult li {
+	margin-bottom: 10px; /* 항목 간의 간격 설정 (선택 사항) */
+}
+
+@media (max-width: 600px) {
+	#result h2 {
+		font-size: 16px;
+	}
+
+	#result p {
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 600px) {
+	.container {
+		padding: 1rem;
+	}
+
+	textarea {
+		height: 150px;
+	}
+}
