@@ -24,8 +24,11 @@ document
 				// 번역된 텍스트를 문장 단위로 분리
 				const sentences = data.translation.match(/[^.!?]+[.!?]+/g) || [];
 
-				// 각 문장을 p 태그로 감싸서 추가
-				sentences.forEach((sentence, index) => {
+				// 발음 표기 텍스트를 문장 단위로 분리
+				const pronunciations = data.pronunciation.match(/[^.!?]+[.!?]+/g) || [];
+
+				// 번역 결과 표시
+				sentences.forEach((sentence) => {
 					const p = document.createElement("p");
 					p.textContent = sentence.trim();
 					translationResult.appendChild(p);
@@ -37,26 +40,10 @@ document
 				);
 				pronunciationList.innerHTML = ""; // 기존 내용 삭제
 
-				// 발음 표기를 문장 단위로 분리 (첫 줄은 설명이므로 제외)
-				const pronunciations = data.pronunciation
-					.split("\n")
-					.slice(1)
-					.filter(Boolean);
-
-				// 정규식을 통해 발음 표기를 문장 단위로 더 정확히 분리
-				const pronunciationSentences =
-					pronunciations.join(" ").match(/[^.!?]+[.!?]+/g) || [];
-
-				if (sentences.length !== pronunciationSentences.length) {
-					console.error("문장과 발음 표기의 개수가 일치하지 않습니다.");
-				}
-
 				// 각 문장에 대해 발음 표기 및 TTS 재생 버튼 추가
 				sentences.forEach((sentence, index) => {
 					const li = document.createElement("li");
-					const pronunciation = pronunciationSentences[index]
-						? pronunciationSentences[index].trim()
-						: "(발음 표기 없음)";
+					const pronunciation = pronunciations[index] || "(발음 표기 없음)";
 
 					// TTS 응답 처리 (base64 인코딩된 데이터)
 					const ttsAudio = data.tts_responses[index] || ""; // 서버에서 Base64로 인코딩된 TTS 응답을 가져옵니다.
@@ -65,7 +52,10 @@ document
 						li.innerHTML = `<b>${
 							index + 1
 						}. ${sentence.trim()}</b><br>${pronunciation}
-						<button onclick="playAudio('${ttsAudio}')">🔊</button>`;
+					<button onclick="playAudioAndShowGraph('${ttsAudio}', '${encodeURIComponent(
+							sentence
+						)}', ${index})">🔊</button>
+					<br><canvas id="speedGraph${index}" width="400" height="100"></canvas>`;
 					} else {
 						li.innerHTML = `<b>${
 							index + 1
@@ -81,7 +71,54 @@ document
 			.catch((error) => console.error("Error:", error));
 	});
 
-function playAudio(base64Audio) {
+function playAudioAndShowGraph(base64Audio, encodedSentence, index) {
+	const sentence = decodeURIComponent(encodedSentence); // 전달된 sentence를 디코딩합니다.
 	const audio = new Audio(`data:audio/mpeg;base64,${base64Audio}`);
-	audio.play();
+	const words = sentence.split(" ").length;
+
+	audio.addEventListener("loadedmetadata", () => {
+		const duration = audio.duration; // 재생 길이(초)
+		const speed = words / duration; // 속도 계산 (단어/초)
+
+		// x축 최대값을 10초 단위로 설정 (최소 10초)
+		const maxDuration = Math.ceil(duration / 10) * 10;
+
+		// 속도를 그래프로 표시
+		const ctx = document.getElementById(`speedGraph${index}`).getContext("2d");
+		const data = {
+			labels: ["Speed"],
+			datasets: [
+				{
+					label: "Words per second",
+					data: [speed],
+					backgroundColor: "rgba(75, 192, 192, 0.2)",
+					borderColor: "rgba(75, 192, 192, 1)",
+					borderWidth: 1,
+				},
+			],
+		};
+
+		new Chart(ctx, {
+			type: "bar",
+			data: data,
+			options: {
+				indexAxis: "y", // y축을 기준으로 수평 그래프 생성
+				scales: {
+					x: {
+						beginAtZero: true,
+						max: maxDuration, // x축 최대값을 10초 단위로 설정
+						ticks: {
+							stepSize: 10, // 10초 단위로 x축 라벨 표시
+						},
+						title: {
+							display: true,
+							text: "Seconds",
+						},
+					},
+				},
+			},
+		});
+
+		audio.play();
+	});
 }
