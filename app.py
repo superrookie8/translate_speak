@@ -2,7 +2,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import base64
-from io import BytesIO  # 이 줄을 추가하여 BytesIO를 임포트합니다.
+from io import BytesIO
 from flask import Flask, request, jsonify, render_template
 
 load_dotenv()
@@ -10,7 +10,7 @@ load_dotenv()
 
 # OpenAI 클라이언트 초기화
 client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),  # 환경 변수에서 API 키 가져오기
+    api_key=os.environ.get("OPENAI_API_KEY"), 
 )
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ import re
 
 
 def translate_and_phoneticize(text):
-    # GPT-4o-mini 모델을 사용하여 텍스트를 영어로 번역
+    
     translation_response = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         messages=[
@@ -36,10 +36,10 @@ def translate_and_phoneticize(text):
     )
     translation = translation_response.choices[0].message.content.strip()
 
-    # 번역 문장과 절로 분리 (마침표, 느낌표, 물음표, 쉼표 기준)
+    
     segments = re.split(r"(?<=[.!?,])\s+", translation)
 
-    # 각 세그먼트에 대한 발음 표기 생성
+   
     phonetic_texts = []
     for segment in segments:
         phonetic_response = client.chat.completions.create(
@@ -71,7 +71,7 @@ def audio_tts(text):
     # 음성 데이터를 Base64로 인코딩
     audio_base64 = base64.b64encode(audio_io.getvalue()).decode("utf-8")
 
-    return audio_base64  # Base64로 인코딩된 음성 데이터를 반환
+    return audio_base64  
 
 
 @app.route("/translate_pronunciation", methods=["POST"])
@@ -79,7 +79,7 @@ def translate_pronunciation():
     text = request.json["text"]
     segments, phonetic_texts = translate_and_phoneticize(text)
 
-    # TTS 응답 생성 (영어 원문에 대해)
+  
     tts_responses = []
     for segment in segments:
         try:
@@ -100,7 +100,7 @@ def translate_pronunciation():
 
 @app.route("/")
 def index():
-    # return "Translation API is running!"
+ 
     return render_template("index.html")
 
 
@@ -117,7 +117,7 @@ def result_demo():
 
 
 def translate_to_korean_and_phoneticize(text):
-    # GPT-4 모델을 사용하여 텍스트를 한국어로 번역
+
     translation_response = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         messages=[
@@ -134,10 +134,10 @@ def translate_to_korean_and_phoneticize(text):
     )
     translation = translation_response.choices[0].message.content.strip()
 
-    # 영어 원문을 문장과 절로 분리 (마침표, 느낌표, 물음표, 쉼표 기준)
+
     segments = re.split(r"(?<=[.!?,])\s+", text)
 
-    # 각 영어 세그먼트에 대한 한국어 발음 표기 생성
+
     phonetic_texts = []
     for segment in segments:
         max_retries = 3
@@ -177,7 +177,7 @@ def translate_to_korean_and_phoneticize(text):
     return translation, segments, phonetic_texts
 
 
-# 새로운 API 엔드포인트 추가
+
 @app.route("/translate_to_korean", methods=["POST"])
 def translate_to_korean():
     text = request.json["text"]
