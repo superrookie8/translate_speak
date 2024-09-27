@@ -8,28 +8,75 @@
 	</head>
 	<body>
 		<div class="container">
-			<h1>한국어 - 영어 번역</h1>
-			<form id="translationForm">
-				<label for="message">번역할 텍스트를 입력하세요:</label>
-				<textarea
-					id="message"
-					name="message"
-					rows="10"
-					placeholder="여기에 한국어 텍스트를 입력하세요..."
-				></textarea>
-				<button type="submit">번역하기</button>
-			</form>
+			<h1>번역 서비스</h1>
+			<div class="tab">
+				<button class="tablinks active" onclick="openTab(event, 'koreanToEnglish')">한국어 → 영어</button>
+				<button class="tablinks" onclick="openTab(event, 'englishToKorean')">영어 → 한국어</button>
+			</div>
+
+			<div id="koreanToEnglish" class="tabcontent" style="display:block;">
+				<form id="translationForm">
+					<label for="message">번역할 텍스트를 입력하세요:</label>
+					<textarea
+						id="message"
+						name="message"
+						rows="10"
+						placeholder="여기에 한국어 텍스트를 입력하세요..."
+					></textarea>
+					<button type="submit" id="translateButton">
+						<span class="button-text">번역하기</span>
+						<span class="loading-indicator" style="display: none;"></span>
+					</button>
+				</form>
+			</div>
+
+			<div id="englishToKorean" class="tabcontent">
+				<form id="englishTranslationForm">
+					<label for="englishMessage">Enter text to translate:</label>
+					<textarea
+						id="englishMessage"
+						name="englishMessage"
+						rows="10"
+						placeholder="Enter English text here..."
+					></textarea>
+					<button type="submit" id="englishTranslateButton">
+						<span class="button-text">Translate</span>
+						<span class="loading-indicator" style="display: none;"></span>
+					</button>
+				</form>
+			</div>
 
 			<div id="result" class="hidden">
+				<h1 id="resultTitle">번역 결과</h1>
 				<div class="result-section">
-					<h2>번역 결과:</h2>
-					<p id="translationResult"></p>
+					<h2 id="originalTitle">원본 텍스트:</h2>
+					<p id="original"></p>
 				</div>
 				<div class="result-section">
-					<h2>발음 표기:</h2>
+					<h2 id="translationTitle">번역 결과:</h2>
+					<div id="translationResult"></div>
+				</div>
+				<div class="result-section">
+					<h2 id="pronunciationTitle">발음 표기:</h2>
 					<ul id="pronunciationResult"></ul>
 				</div>
 			</div>
+
+			<!-- <div id="englishResult" class="hidden">
+				<h1>Translation Result</h1>
+				<div class="result-section">
+					<h2>Original Text:</h2>
+					<p id="englishOriginal"></p>
+				</div>
+				<div class="result-section">
+					<h2>Translation:</h2>
+					<div id="koreanTranslationResult"></div>
+				</div>
+				<div class="result-section">
+					<h2>Pronunciation:</h2>
+					<ul id="englishPronunciationResult"></ul>
+				</div>
+			</div> -->
 		</div>
 
 		<script src="/static/js/script.js"></script>

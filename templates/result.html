@@ -1,28 +1,55 @@
 <!DOCTYPE html>
 <html lang="ko">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>번역 결과</title>
-		<link rel="stylesheet" href="/static/css/style.css" />
-	</head>
-	<body>
-		<div class="container">
-			<h1>번역 결과</h1>
-			<div id="result">
-				<div class="result-section">
-					<h2>번역 결과:</h2>
-					<p id="translation">{{ data.translation }}</p>
-				</div>
-				<div class="result-section">
-					<h2>발음 표기:</h2>
-					<ul id="pronunciation">
-						{% for pron in data.pronunciation %}
-						<li>{{ pron }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-			</div>
-		</div>
-	</body>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>번역 결과</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>번역 결과</h1>
+        <div id="result">
+            <div class="result-section">
+                <h2>원본 텍스트:</h2>
+                <p id="original">{{ data.original_text }}</p>
+            </div>
+            <div class="result-section">
+                <h2>번역 결과:</h2>
+                <p id="translation">{{ data.translation }}</p>
+            </div>
+            <div class="result-section">
+                <h2>발음 표기:</h2>
+                <ul id="pronunciation">
+                    {% for pron in data.pronunciation %}
+                    <li>
+                        {{ pron }}
+                        {% if data.tts_responses_pronunciation %}
+                        <button onclick="playAudio('{{ data.tts_responses_pronunciation[loop.index0] }}')">🔊</button>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% if data.direction == 'en_to_ko' %}
+            <div class="result-section">
+                <h2>영어 발음 연습:</h2>
+                <ul id="english-pronunciation">
+                    {% for sentence in data.original_sentences %}
+                    <li>
+                        {{ sentence }}
+                        {% if data.tts_responses_sentences %}
+                        <button onclick="playAudio('{{ data.tts_responses_pronunciation[loop.index0] }}')">🔊</button>
+                        {% endif %}
+                        <canvas id="speedGraph{{ loop.index0 }}" width="400" height="100"></canvas>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+   
+</body>
 </html>
+
