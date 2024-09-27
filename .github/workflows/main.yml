@@ -29,6 +29,8 @@ jobs:
         flake8 .
 
     - name: Run tests
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: python -m unittest discover tests
 
     # 필요한 경우 추가 단계를 여기에 포함시킬 수 있습니다.
