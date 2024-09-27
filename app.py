@@ -10,7 +10,7 @@ load_dotenv()
 
 # OpenAI 클라이언트 초기화
 client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"), 
+    api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ import re
 
 
 def translate_and_phoneticize(text):
-    
+
     translation_response = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         messages=[
@@ -36,10 +36,8 @@ def translate_and_phoneticize(text):
     )
     translation = translation_response.choices[0].message.content.strip()
 
-    
     segments = re.split(r"(?<=[.!?,])\s+", translation)
 
-   
     phonetic_texts = []
     for segment in segments:
         phonetic_response = client.chat.completions.create(
@@ -71,7 +69,7 @@ def audio_tts(text):
     # 음성 데이터를 Base64로 인코딩
     audio_base64 = base64.b64encode(audio_io.getvalue()).decode("utf-8")
 
-    return audio_base64  
+    return audio_base64
 
 
 @app.route("/translate_pronunciation", methods=["POST"])
@@ -79,7 +77,6 @@ def translate_pronunciation():
     text = request.json["text"]
     segments, phonetic_texts = translate_and_phoneticize(text)
 
-  
     tts_responses = []
     for segment in segments:
         try:
@@ -100,7 +97,7 @@ def translate_pronunciation():
 
 @app.route("/")
 def index():
- 
+
     return render_template("index.html")
 
 
@@ -134,9 +131,7 @@ def translate_to_korean_and_phoneticize(text):
     )
     translation = translation_response.choices[0].message.content.strip()
 
-
     segments = re.split(r"(?<=[.!?,])\s+", text)
-
 
     phonetic_texts = []
     for segment in segments:
@@ -175,7 +170,6 @@ def translate_to_korean_and_phoneticize(text):
             phonetic_texts.append("(발음 변환 실패)")
 
     return translation, segments, phonetic_texts
-
 
 
 @app.route("/translate_to_korean", methods=["POST"])
